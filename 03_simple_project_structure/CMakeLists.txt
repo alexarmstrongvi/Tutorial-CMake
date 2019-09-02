@@ -1,5 +1,5 @@
-message( "INFO :: Generating build files for project located at ${CMAKE_CURRENT_SOURCE_DIR}" )
-message( "INFO :: Build files stored at :: ${CMAKE_CURRENT_BINARY_DIR}" )
+message( STATUS "INFO :: Generating build files for project located at ${CMAKE_CURRENT_SOURCE_DIR}" )
+message( STATUS "INFO :: Build files stored at :: ${CMAKE_CURRENT_BINARY_DIR}" )
 
 cmake_minimum_required( VERSION 3.15 )
 
@@ -9,24 +9,24 @@ Project( 03_simple_project_structure
         LANGUAGES
             CXX
 )
-message( STATUS "Project defined : ${PROJECT_NAME} (version ${PROJECT_VERSION})" )
+message( STATUS "INFO :: Project defined : ${PROJECT_NAME} (version ${PROJECT_VERSION})" )
 
 # Create a library target for this project
+# - This could be moved to a CMakeLists.txt file in the src directory
+file(GLOB HEADER_LIST CONFIGURE_DEPENDS include/03_simple_project_structure/*.hpp)
 add_library( 03_simple_project_structureLib
     # List source files in src/
     src/adder.cxx
     # List header files in include/ (optional but helpful)
     include/03_simple_project_structure/adder.h
+    # -OR- 
+    #${HEADER_LIST}
 )
 # Add directories to the library so that files are useable
-target_include_directories(03_simple_project_structureLib 
-    PUBLIC # any projects linking this library will require these files too 
-        include
-)
+target_include_directories(03_simple_project_structureLib PUBLIC include )
 
 # Create an executable target
+# - This could be moved to a CMakeLists.txt file in the apps directory
 add_executable( add_and_print apps/add_and_print.cxx )
 # Link all needed libraries for the executable
-target_link_libraries( add_and_print 
-    PUBLIC 03_simple_project_structureLib        
-)
+target_link_libraries( add_and_print 03_simple_project_structureLib )
