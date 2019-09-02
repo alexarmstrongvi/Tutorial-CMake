@@ -3,7 +3,14 @@ message( STATUS "INFO :: Build files stored at :: ${CMAKE_CURRENT_BINARY_DIR}" )
 
 cmake_minimum_required( VERSION 3.15 )
 
-Project( 03_simple_project_structure 
+# Require out-of-source builds
+file(TO_CMAKE_PATH "${CMAKE_CURRENT_BINARY_DIR}/CMakeLists.txt" LOC_PATH)
+if(EXISTS "${LOC_PATH}")
+    message(FATAL_ERROR "Do not build in a source directory (or any directory with a CMakeLists.txt file). Please make a build/ subdirectory.")
+endif()
+
+# Create the project
+project( 03_simple_project_structure 
         VERSION # major.minor.patch.tweak
             1.0.0.0
         LANGUAGES
@@ -30,3 +37,4 @@ target_include_directories(03_simple_project_structureLib PUBLIC include )
 add_executable( add_and_print apps/add_and_print.cxx )
 # Link all needed libraries for the executable
 target_link_libraries( add_and_print 03_simple_project_structureLib )
+

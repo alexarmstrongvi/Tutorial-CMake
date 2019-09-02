@@ -4,6 +4,12 @@ message( STATUS "INFO :: Build files will be stored at :: ${CMAKE_CURRENT_BINARY
 
 cmake_minimum_required(VERSION 3.11)
 
+# Require out-of-source builds
+file(TO_CMAKE_PATH "${CMAKE_CURRENT_BINARY_DIR}/CMakeLists.txt" LOC_PATH)
+if(EXISTS "${LOC_PATH}")
+    message(FATAL_ERROR "Do not build in a source directory (or any directory with a CMakeLists.txt file). Please make a build/ subdirectory.")
+endif()
+
 project(02_simple_cmake
     VERSION # major.minor.patch.tweak
         1.0.0.0
